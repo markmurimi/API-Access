@@ -1,0 +1,15 @@
+<div class="jumbotron" style="background-image:Url(../assets/github.jpg);">
+  <div class="container"style="color:white;background-color:black; opacity:0.6;text-align:center;padding:120px;font-size:150%;">
+    <h1>GITHUB SEARCH APP</h1>
+  </div>
+</div>
+<div class="container"style="padding:50px;">
+    <form style="text-align:center;font-size:30px;">
+      <div class="form-group">
+        <label for="name">GitHub Username</label>
+        <p></p>
+        <input type="text" placeholder="Enter the username" class="form-control" name="username" [(ngModel)]="username" (keyup)="searchUser()">
+      </div>
+    </form>
+    <p style="text-align:center;font-size:30px;">Profile Details</p>
+</div>
