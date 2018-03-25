@@ -1,0 +1,463 @@
+<!DOCTYPE html>
+<html prefix="og: http://ogp.me/ns#" lang="en-US">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+<title>GitHub + Ansible: deploy your public SSH keys to your servers | Carlos Buenosvinos</title>
+<link rel="profile" href="https://gmpg.org/xfn/11">
+<link rel="pingback" href="https://carlosbuenosvinos.com/xmlrpc.php">
+<link rel='dns-prefetch' href='//s0.wp.com' />
+<link rel='dns-prefetch' href='//s.w.org' />
+<link rel="alternate" type="application/rss+xml" title="Carlos Buenosvinos &raquo; Feed" href="https://carlosbuenosvinos.com/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Carlos Buenosvinos &raquo; Comments Feed" href="https://carlosbuenosvinos.com/comments/feed/" />
+<link rel="alternate" type="application/rss+xml" title="Carlos Buenosvinos &raquo; GitHub + Ansible: deploy your public SSH keys to your servers Comments Feed" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/feed/" />
+		<script type="text/javascript">
+			window._wpemojiSettings = {"baseUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/72x72\/","ext":".png","svgUrl":"https:\/\/s.w.org\/images\/core\/emoji\/2.4\/svg\/","svgExt":".svg","source":{"concatemoji":"https:\/\/carlosbuenosvinos.com\/wp-includes\/js\/wp-emoji-release.min.js?ver=4.9.3"}};
+			!function(a,b,c){function d(a,b){var c=String.fromCharCode;l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,a),0,0);var d=k.toDataURL();l.clearRect(0,0,k.width,k.height),l.fillText(c.apply(this,b),0,0);var e=k.toDataURL();return d===e}function e(a){var b;if(!l||!l.fillText)return!1;switch(l.textBaseline="top",l.font="600 32px Arial",a){case"flag":return!(b=d([55356,56826,55356,56819],[55356,56826,8203,55356,56819]))&&(b=d([55356,57332,56128,56423,56128,56418,56128,56421,56128,56430,56128,56423,56128,56447],[55356,57332,8203,56128,56423,8203,56128,56418,8203,56128,56421,8203,56128,56430,8203,56128,56423,8203,56128,56447]),!b);case"emoji":return b=d([55357,56692,8205,9792,65039],[55357,56692,8203,9792,65039]),!b}return!1}function f(a){var c=b.createElement("script");c.src=a,c.defer=c.type="text/javascript",b.getElementsByTagName("head")[0].appendChild(c)}var g,h,i,j,k=b.createElement("canvas"),l=k.getContext&&k.getContext("2d");for(j=Array("flag","emoji"),c.supports={everything:!0,everythingExceptFlag:!0},i=0;i<j.length;i++)c.supports[j[i]]=e(j[i]),c.supports.everything=c.supports.everything&&c.supports[j[i]],"flag"!==j[i]&&(c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&c.supports[j[i]]);c.supports.everythingExceptFlag=c.supports.everythingExceptFlag&&!c.supports.flag,c.DOMReady=!1,c.readyCallback=function(){c.DOMReady=!0},c.supports.everything||(h=function(){c.readyCallback()},b.addEventListener?(b.addEventListener("DOMContentLoaded",h,!1),a.addEventListener("load",h,!1)):(a.attachEvent("onload",h),b.attachEvent("onreadystatechange",function(){"complete"===b.readyState&&c.readyCallback()})),g=c.source||{},g.concatemoji?f(g.concatemoji):g.wpemoji&&g.twemoji&&(f(g.twemoji),f(g.wpemoji)))}(window,document,window._wpemojiSettings);
+		</script>
+		<style type="text/css">
+img.wp-smiley,
+img.emoji {
+	display: inline !important;
+	border: none !important;
+	box-shadow: none !important;
+	height: 1em !important;
+	width: 1em !important;
+	margin: 0 .07em !important;
+	vertical-align: -0.1em !important;
+	background: none !important;
+	padding: 0 !important;
+}
+</style>
+<link rel='stylesheet' id='dw-minion-main-css'  href='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/css/main.css?ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='dw-minion-style-css'  href='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/style.css?ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='dw-minion-qa-css'  href='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/dwqa-templates/style.css?ver=4.9.3' type='text/css' media='all' />
+<link rel='stylesheet' id='social-logos-css'  href='https://carlosbuenosvinos.com/wp-content/plugins/jetpack/_inc/social-logos/social-logos.min.css?ver=1' type='text/css' media='all' />
+<link rel='stylesheet' id='jetpack_css-css'  href='https://carlosbuenosvinos.com/wp-content/plugins/jetpack/css/jetpack.css?ver=5.6.1' type='text/css' media='all' />
+<link rel='stylesheet' id='core3.0-css'  href='https://carlosbuenosvinos.com/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shCore.css?ver=3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='core-Default3.0-css'  href='https://carlosbuenosvinos.com/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shCoreDefault.css?ver=3.0' type='text/css' media='all' />
+<link rel='stylesheet' id='theme-Default3.0-css'  href='https://carlosbuenosvinos.com/wp-content/plugins/wp-syntaxhighlighter/syntaxhighlighter3/styles/shThemeDefault.css?ver=3.0' type='text/css' media='all' />
+      <script>
+      if (document.location.protocol != "https:") {
+          document.location = document.URL.replace(/^http:/i, "https:");
+      }
+      </script>
+      <script type='text/javascript' src='https://carlosbuenosvinos.com/wp-includes/js/jquery/jquery.js?ver=1.12.4'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-includes/js/jquery/jquery-migrate.min.js?ver=1.4.1'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var related_posts_js_options = {"post_heading":"h4"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/plugins/jetpack/modules/related-posts/related-posts.js?ver=20150408'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/modernizr-2.6.2.min.js?ver=4.9.3'></script>
+<link rel='https://api.w.org/' href='https://carlosbuenosvinos.com/wp-json/' />
+<link rel="EditURI" type="application/rsd+xml" title="RSD" href="https://carlosbuenosvinos.com/xmlrpc.php?rsd" />
+<link rel="wlwmanifest" type="application/wlwmanifest+xml" href="https://carlosbuenosvinos.com/wp-includes/wlwmanifest.xml" /> 
+<link rel='prev' title='Event Sourcing is not a messaging integration pattern' href='https://carlosbuenosvinos.com/event-sourcing-is-not-a-messaging-integration-pattern/' />
+<link rel='next' title='&#8220;Domain-Driven Design in PHP&#8221; (@dddbook) is finished' href='https://carlosbuenosvinos.com/domain-driven-design-in-php-book-is-finished/' />
+<meta name="generator" content="WordPress 4.9.3" />
+<link rel="canonical" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/" />
+<link rel='shortlink' href='https://wp.me/p3Hlp5-fr' />
+<link rel="alternate" type="application/json+oembed" href="https://carlosbuenosvinos.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcarlosbuenosvinos.com%2Fgithub-ansible-deploy-your-public-ssh-keys-to-your-server%2F" />
+<link rel="alternate" type="text/xml+oembed" href="https://carlosbuenosvinos.com/wp-json/oembed/1.0/embed?url=https%3A%2F%2Fcarlosbuenosvinos.com%2Fgithub-ansible-deploy-your-public-ssh-keys-to-your-server%2F&#038;format=xml" />
+
+<link rel='dns-prefetch' href='//v0.wordpress.com'/>
+<link rel='dns-prefetch' href='//i0.wp.com'/>
+<link rel='dns-prefetch' href='//i1.wp.com'/>
+<link rel='dns-prefetch' href='//i2.wp.com'/>
+<link rel='dns-prefetch' href='//jetpack.wordpress.com'/>
+<link rel='dns-prefetch' href='//s0.wp.com'/>
+<link rel='dns-prefetch' href='//s1.wp.com'/>
+<link rel='dns-prefetch' href='//s2.wp.com'/>
+<link rel='dns-prefetch' href='//public-api.wordpress.com'/>
+<link rel='dns-prefetch' href='//0.gravatar.com'/>
+<link rel='dns-prefetch' href='//1.gravatar.com'/>
+<link rel='dns-prefetch' href='//2.gravatar.com'/>
+<link rel='dns-prefetch' href='//widgets.wp.com'/>
+    <style type="text/css" id="minion_layout" media="screen">
+    .container {margin: 0 auto;}
+    </style>
+        <style type="text/css" id="minion_leftbar_color" media="screen">
+      .show-nav .show-site-nav i,.action.search label,.site-actions i {
+        color: ;
+      }
+      .site-actions,.show-nav .show-site-nav i,.action.search label,.site-actions i {
+        background: #222222;
+      }
+      .no-touch .site-actions .social:hover i,.back-top:hover i,.no-touch .action.search:hover label,.action.search.active label,.action.search .search-query {
+        color: ;
+      }
+      .no-touch .site-actions .social:hover i,.back-top:hover i,.no-touch .action.search:hover label,.action.search.active label,.action.search .search-query {
+        background: ;
+      }
+      @media (min-width: 768px) {
+        .site-actions,.site-actions .actions>.back-top {
+          border-top: 1px solid ;
+        }
+        .social,.site-actions .actions > .action,.show-site-nav {
+          border-bottom: 1px solid ;
+        }
+        .pager .nav-next a:hover .btn, .pager .nav-previous a:hover .btn {
+          background: ;
+        }
+      }
+    </style>
+        <style type="text/css" id="minion_color" media="screen">
+      .btn:hover,#nav-below .btn:hover,.accordion-heading .accordion-toggle,.nav-tabs > li > a:hover, .nav-tabs > li > a:focus,.nav-tabs > .active > a, .nav-tabs > .active > a:hover, .nav-tabs > .active > a:focus,.pager .pager-title .nav-next a:hover .btn, .pager .pager-title .nav-previous a:hover .btn, .entry-footer .entry-tags .tags-links a:hover,#cancel-comment-reply-link:hover,#commentform #submit,.post-password-required .entry-content input[type="submit"]:hover,blockquote p {
+        background-color: #fc615d;
+      }
+      a:hover,.btn-link:hover,.btn-link:focus,.comment-list .comment-datetime:hover,.comment-list .comment-edit-link:hover,.entry-meta a, .entry-meta .posted-on a:hover, .entry-meta .comments-link a:hover,.format-link .entry-content a,.format-quote .bq-meta a,.widget_nav_menu .current_page_item > a, .widget_nav_menu .current-menu-item > a,[class*="widget_recent_comments"] .url,.dw_twitter .tweet-content a {
+        color: #fc615d;
+      }
+      .nav-tabs > .active > a:before,blockquote cite:before {
+        border-top: 6px solid #fc615d;
+      }
+    </style>
+    <meta property="og:image" content="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=300%2C188&ssl=1" />
+<!-- Jetpack Open Graph Tags -->
+<meta property="og:type" content="article" />
+<meta property="og:title" content="GitHub + Ansible: deploy your public SSH keys to your servers" />
+<meta property="og:url" content="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/" />
+<meta property="og:description" content="When I work with some mates in a side project, I need to give them access to the server. This is a quick tip about how to easily do it using GitHub and Ansible. The solution is simple and elegant." />
+<meta property="article:published_time" content="2016-09-14T16:22:39+00:00" />
+<meta property="article:modified_time" content="2016-09-14T16:23:23+00:00" />
+<meta property="og:site_name" content="Carlos Buenosvinos" />
+<meta property="og:image" content="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=1200%2C750&amp;ssl=1" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="750" />
+<meta property="og:locale" content="en_US" />
+<meta name="twitter:site" content="@buenosvinos" />
+<meta name="twitter:text:title" content="GitHub + Ansible: deploy your public SSH keys to your servers" />
+<meta name="twitter:image" content="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=1200%2C750&#038;ssl=1&#038;w=640" />
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:creator" content="@buenosvinos" />
+<link rel="icon" href="https://i0.wp.com/carlosbuenosvinos.com/wp-content/uploads/2013/10/cropped-0e1300d.jpg?fit=32%2C32&#038;ssl=1" sizes="32x32" />
+<link rel="icon" href="https://i0.wp.com/carlosbuenosvinos.com/wp-content/uploads/2013/10/cropped-0e1300d.jpg?fit=192%2C192&#038;ssl=1" sizes="192x192" />
+<link rel="apple-touch-icon-precomposed" href="https://i0.wp.com/carlosbuenosvinos.com/wp-content/uploads/2013/10/cropped-0e1300d.jpg?fit=180%2C180&#038;ssl=1" />
+<meta name="msapplication-TileImage" content="https://i0.wp.com/carlosbuenosvinos.com/wp-content/uploads/2013/10/cropped-0e1300d.jpg?fit=270%2C270&#038;ssl=1" />
+</head>
+<body data-rsssl=1 class="post-template-default single single-post postid-957 single-format-standard">
+<div id="page" class="hfeed site">
+	<div class="container clearfix">
+				<div id="navigation" class="site-nav">
+			<div class="site-nav-inner">
+				<div class="container">
+					<header id="masthead" class="site-header" role="banner">
+						<h1 class="site-title display-logo"><a href="https://carlosbuenosvinos.com/" title="Carlos Buenosvinos" rel="home"><img alt="Carlos Buenosvinos" src="https://carlosbuenosvinos.com/wp-content/uploads/2013/10/0e1300d1.jpg" /></a></h1><p class="site-subtitle">PHP, DevOps, Extreme Programming, Scrum and Domain-Driven Design</p><h2 class="site-description">Software Development, Agile and PHP Lover. Working as a Technical Director at <a href="https://www.xing.com" target="_blank">Xing</a>. Having fun developing on Mobile, Raspberry Pi and Games. Check more about <a href="https://carlosbuenosvinos.com/about-me/">who am I</a>, follow me on <a href="http://twitter.com/buenosvinos" target="_blank">@buenosvinos</a>, or <a href="https://github.com/carlosbuenosvinos" target="_blank">Github</a>.</h2>					</header>
+					<div id="main-sidebar" class="widget-area" role="complementary">
+		<aside id="nav_menu-2" class="widget widget_nav_menu"><h3 class="widget-title">Menu</h3><div class="menu-pages-side-menu-container"><ul id="menu-pages-side-menu" class="menu"><li id="menu-item-579" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-579"><a href="https://carlosbuenosvinos.com/domain-driven-design/">Domain-Driven Design</a></li>
+<li id="menu-item-623" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-623"><a href="https://carlosbuenosvinos.com/side-projects/">Side Projects</a></li>
+<li id="menu-item-580" class="menu-item menu-item-type-post_type menu-item-object-page menu-item-580"><a href="https://carlosbuenosvinos.com/about-me/">About me</a></li>
+</ul></div></aside></div>				</div>
+			</div>
+		</div>
+          <div id="actions" class="site-actions clearfix">
+      <div class="action show-site-nav">
+          <i class="icon-reorder"></i>
+      </div>
+      <div class="clearfix actions">
+          <div class="action search">
+              <form action="https://carlosbuenosvinos.com/" class="action searchform">
+                  <input type="text" placeholder="Search" id="s" name="s" class="search-query">
+                  <label for="s"></label>
+              </form>
+          </div>
+          <a class="back-top action" href="#page"><i class="icon-chevron-up"></i></a>
+                    <div class="action socials">
+              <i class="icon-link active-socials"></i>
+              <ul class="unstyled list-socials clearfix" style="width: 200px;">
+                  <li class="social"><a href="https://www.facebook.com/carlos.buenosvinos"><i class="icon-facebook"></i></a></li>                  <li class="social"><a href="https://twitter.com/buenosvinos"><i class="icon-twitter"></i></a></li>                  <li class="social"><a href="https://plus.google.com/u/1/111714984515583558388"><i class="icon-google-plus"></i></a></li>                  <li class="social"><a href="http://www.youtube.com/user/carlosbuenosvinos"><i class="icon-youtube"></i></a></li>                  <li class="social"><a href="http://es.linkedin.com/in/carlosbuenosvinos"><i class="icon-linkedin"></i></a></li>              </ul>          </div>
+      </div>
+  </div>
+  		<div id="main" class="site-main">
+			<div class="site-main-inner">
+				<div class="container clearfix">
+					<div id="primary" class="content-area">
+	<div class="primary-inner">
+		<div id="content" class="site-content" role="main">
+		<article id="post-957" class="post-957 post type-post status-publish format-standard has-post-thumbnail hentry category-devops tag-ansible tag-github tag-provision tag-ssh-key">
+	<header class="entry-header">
+		<h1 class="entry-title">GitHub + Ansible: deploy your public SSH keys to your servers</h1>		<div class="entry-meta"><span class="byline">By <span class="author vcard"><a class="url fn n" href="https://carlosbuenosvinos.com/author/admin/" title="View all posts by Carlos Buenosvinos">Carlos Buenosvinos</a></span></span><span class="cat-links"> in <a href="https://carlosbuenosvinos.com/category/devops/" rel="category tag">DevOps</a></span><span class="sep"><span class="post-format"><i class="icon-file-text"></i></span></span><span class="posted-on"><a href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/" title="6:22 PM" rel="bookmark"><i class="icon-calendar-empty"></i> <time class="entry-date published" datetime="2016-09-14T18:22:39+00:00">September 14, 2016</time></a></span>		<span class="comments-link"><a href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/#comments"><span class="dsq-postid" data-dsqidentifier="957 https://carlosbuenosvinos.com/?p=957"><i class="icon-comment-alt"></i> 1 Comment</span></a></span>
+	</div>	</header>
+		<div class="entry-thumbnail"><img width="1920" height="1200" src="https://carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg" class="attachment-post-thumbnail size-post-thumbnail wp-post-image" alt="" srcset="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?w=1920&amp;ssl=1 1920w, https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?resize=300%2C188&amp;ssl=1 300w, https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?resize=768%2C480&amp;ssl=1 768w, https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?resize=1024%2C640&amp;ssl=1 1024w, https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?w=1240&amp;ssl=1 1240w, https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?w=1860&amp;ssl=1 1860w" sizes="(max-width: 1920px) 100vw, 1920px" data-attachment-id="961" data-permalink="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/octocat_darkwood/" data-orig-file="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=1920%2C1200&amp;ssl=1" data-orig-size="1920,1200" data-comments-opened="1" data-image-meta="{&quot;aperture&quot;:&quot;0&quot;,&quot;credit&quot;:&quot;&quot;,&quot;camera&quot;:&quot;&quot;,&quot;caption&quot;:&quot;&quot;,&quot;created_timestamp&quot;:&quot;0&quot;,&quot;copyright&quot;:&quot;&quot;,&quot;focal_length&quot;:&quot;0&quot;,&quot;iso&quot;:&quot;0&quot;,&quot;shutter_speed&quot;:&quot;0&quot;,&quot;title&quot;:&quot;&quot;,&quot;orientation&quot;:&quot;0&quot;}" data-image-title="octocat_darkwood" data-image-description="" data-medium-file="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=300%2C188&amp;ssl=1" data-large-file="https://i1.wp.com/carlosbuenosvinos.com/wp-content/uploads/2016/09/octocat_darkwood.jpg?fit=620%2C388&amp;ssl=1" /></div>
+			<div class="entry-content">
+		<p>When I work with some mates in a side project, I need to give them access to the server. This is a quick tip about how to easily do it using GitHub and Ansible. The solution is simple and elegant.</p>
+<p><span id="more-957"></span></p>
+<p>If you and your mates work with GitHub, you may have added all your public SSH keys to GitHub. A really nice feature that GitHub provides is that you can access any user public SSH keys by visiting:</p>
+<pre>https://github.com/{{ item }}.keys</pre>
+<p>So, for example, if you want to take a look at mine, just visit:</p>
+<pre>https://github.com/carlosbuenosvinos.keys</pre>
+<p>Ok, so now we have a repository of SSH public keys, now it&#8217;s time to deploy them into your server. I love Ansible. The trick here is to use the <a href="http://docs.ansible.com/ansible/authorized_key_module.html" target="_blank">authorized_key</a> module and the <strong>key</strong> option. In the documentation, you can read:</p>
+<blockquote><p>The SSH public key(s), as a string or (since 1.9) url (https://github.com/username.keys).</p></blockquote>
+<p>So, you can add in your provisioning roles a task to include all your friends public SSH keys. In this example, I allow my friends Christian (theUniC), Ricard (ricardclau) and myself.</p>
+<pre>tasks:
+  - name: Ensure collaborators SSH keys are installed
+    authorized_key: user=root key=https://github.com/{{ item }}.keys
+    with_items:
+      - carlosbuenosvinos
+      - theUniC
+      - ricardclau</pre>
+<p>Hope it helps!</p>
+<div class="sharedaddy sd-sharing-enabled"><div class="robots-nocontent sd-block sd-social sd-social-icon sd-sharing"><h3 class="sd-title">Share this:</h3><div class="sd-content"><ul><li class="share-twitter"><a rel="nofollow" data-shared="sharing-twitter-957" class="share-twitter sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=twitter" target="_blank" title="Click to share on Twitter"><span></span><span class="sharing-screen-reader-text">Click to share on Twitter (Opens in new window)</span></a></li><li class="share-linkedin"><a rel="nofollow" data-shared="sharing-linkedin-957" class="share-linkedin sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=linkedin" target="_blank" title="Click to share on LinkedIn"><span></span><span class="sharing-screen-reader-text">Click to share on LinkedIn (Opens in new window)</span></a></li><li class="share-jetpack-whatsapp"><a rel="nofollow" data-shared="" class="share-jetpack-whatsapp sd-button share-icon no-text" href="whatsapp://send?text=GitHub%20%2B%20Ansible%3A%20deploy%20your%20public%20SSH%20keys%20to%20your%20servers https%3A%2F%2Fcarlosbuenosvinos.com%2Fgithub-ansible-deploy-your-public-ssh-keys-to-your-server%2F" target="_blank" title="Click to share on WhatsApp"><span></span><span class="sharing-screen-reader-text">Click to share on WhatsApp (Opens in new window)</span></a></li><li class="share-pocket"><a rel="nofollow" data-shared="" class="share-pocket sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=pocket" target="_blank" title="Click to share on Pocket"><span></span><span class="sharing-screen-reader-text">Click to share on Pocket (Opens in new window)</span></a></li><li class="share-facebook"><a rel="nofollow" data-shared="sharing-facebook-957" class="share-facebook sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=facebook" target="_blank" title="Click to share on Facebook"><span></span><span class="sharing-screen-reader-text">Click to share on Facebook (Opens in new window)</span></a></li><li class="share-google-plus-1"><a rel="nofollow" data-shared="sharing-google-957" class="share-google-plus-1 sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=google-plus-1" target="_blank" title="Click to share on Google+"><span></span><span class="sharing-screen-reader-text">Click to share on Google+ (Opens in new window)</span></a></li><li class="share-tumblr"><a rel="nofollow" data-shared="" class="share-tumblr sd-button share-icon no-text" href="https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/?share=tumblr" target="_blank" title="Click to share on Tumblr"><span></span><span class="sharing-screen-reader-text">Click to share on Tumblr (Opens in new window)</span></a></li><li class="share-end"></li></ul></div></div></div>
+<div id='jp-relatedposts' class='jp-relatedposts' >
+	<h3 class="jp-relatedposts-headline"><em>Related</em></h3>
+</div>			</div>
+		<footer class="entry-footer">
+				<div class="entry-tags">
+			<span class="tags-title">Tags</span>
+			<span class="tags-links"><a href="https://carlosbuenosvinos.com/tag/ansible/" rel="tag">ansible</a><a href="https://carlosbuenosvinos.com/tag/github/" rel="tag">github</a><a href="https://carlosbuenosvinos.com/tag/provision/" rel="tag">provision</a><a href="https://carlosbuenosvinos.com/tag/ssh-key/" rel="tag">ssh key</a></span>
+		</div>
+			</footer>
+</article>	<nav role="navigation" id="nav-below" class="post-navigation pager">
+			<div class="nav-previous"><a href="https://carlosbuenosvinos.com/event-sourcing-is-not-a-messaging-integration-pattern/" rel="prev"><span class="meta-nav btn"><i class="icon-chevron-left"></i></span> <span class="pager-title">Event Sourcing is not a messaging integration pattern</span></a></div>		<div class="nav-next"><a href="https://carlosbuenosvinos.com/domain-driven-design-in-php-book-is-finished/" rel="next"><span class="meta-nav btn"><i class="icon-chevron-right"></i></span><span class="pager-title">&#8220;Domain-Driven Design in PHP&#8221; (@dddbook) is finished</span></a></div>		</nav>
+	
+					<div class="related-posts">
+			<h2 class="related-posts-title">Related Articles.</h2>
+			<div class="related-content">
+								<article class="related-post clearfix">
+					<h3 class="related-title"><a href="https://carlosbuenosvinos.com/setup-your-macos-development-team-with-ansible/" rel="bookmark">Setup your MacOS (or other OS) development team with Ansible</a></h3>
+					<div class="related-meta"><time class="related-date">30 Dec, 2015</time></div>
+				</article>
+								<article class="related-post clearfix">
+					<h3 class="related-title"><a href="https://carlosbuenosvinos.com/deploying-symfony-and-php-apps-with-ansistrano/" rel="bookmark">Deploying Symfony (and PHP) apps with Ansistrano</a></h3>
+					<div class="related-meta"><time class="related-date">20 Oct, 2015</time></div>
+				</article>
+								<article class="related-post clearfix">
+					<h3 class="related-title"><a href="https://carlosbuenosvinos.com/fixing-commit-typos-in-git-history-with-filter-branch/" rel="bookmark">Fixing commit TYPOs in git history with filter-branch</a></h3>
+					<div class="related-meta"><time class="related-date">12 May, 2014</time></div>
+				</article>
+							</div>
+		</div>
+			
+
+<div id="disqus_thread">
+            <div id="dsq-content">
+
+
+            <ul id="dsq-comments">
+                    <li class="post pingback">
+        <p>Pingback: <a href='https://carlosbuenosvinos.com/accessing-securely-production-services-with-ssh-port-forwarding/' rel='external nofollow' class='url'>Accessing securely production services with SSH port forwarding | Carlos Buenosvinos</a>()</p>
+    </li>
+    </li><!-- #comment-## -->
+            </ul>
+
+
+        </div>
+
+    </div>
+
+<script type="text/javascript">
+var disqus_url = 'https://carlosbuenosvinos.com/github-ansible-deploy-your-public-ssh-keys-to-your-server/';
+var disqus_identifier = '957 https://carlosbuenosvinos.com/?p=957';
+var disqus_container_id = 'disqus_thread';
+var disqus_shortname = 'carlosbuenosvinos';
+var disqus_title = "GitHub + Ansible: deploy your public SSH keys to your servers";
+var disqus_config_custom = window.disqus_config;
+var disqus_config = function () {
+    /*
+    All currently supported events:
+    onReady: fires when everything is ready,
+    onNewComment: fires when a new comment is posted,
+    onIdentify: fires when user is authenticated
+    */
+    
+    
+    this.language = '';
+        this.callbacks.onReady.push(function () {
+
+        // sync comments in the background so we don't block the page
+        var script = document.createElement('script');
+        script.async = true;
+        script.src = '?cf_action=sync_comments&post_id=957';
+
+        var firstScript = document.getElementsByTagName('script')[0];
+        firstScript.parentNode.insertBefore(script, firstScript);
+    });
+    
+    if (disqus_config_custom) {
+        disqus_config_custom.call(this);
+    }
+};
+
+(function() {
+    var dsq = document.createElement('script'); dsq.type = 'text/javascript';
+    dsq.async = true;
+    dsq.src = '//' + disqus_shortname + '.disqus.com/embed.js';
+    (document.getElementsByTagName('head')[0] || document.getElementsByTagName('body')[0]).appendChild(dsq);
+})();
+</script>
+
+		</div>
+	</div>
+</div>
+<div id="secondary" class="widget-area" role="complementary">
+		<aside id="search-5" class="widget widget_search"><form role="search" method="get" class="search-form" action="https://carlosbuenosvinos.com/">
+	<label>
+		<span class="screen-reader-text">Search for:</span>
+		<input type="search" class="search-field" placeholder="Search &hellip;" value="" name="s" title="Search for:">
+	</label>
+	<input type="submit" class="search-submit" value="Search">
+</form></aside><aside id="text-5" class="widget widget_text"><h3 class="widget-title">&#8220;Domain-Driven Design in PHP&#8221;</h3>			<div class="textwidget"><a href="https://leanpub.com/ddd-in-php?a=2hmRkQXvrCAx8Wt3fiKXur" target="_blank">
+<img src="https://s3.amazonaws.com/titlepages.leanpub.com/ddd-in-php/large?1412718437"/>
+</a></div>
+		</aside><aside id="categories-3" class="widget widget_categories"><h3 class="widget-title">Categories</h3>		<ul>
+	<li class="cat-item cat-item-28"><a href="https://carlosbuenosvinos.com/category/agile-and-craftsmanship/" >Agile &amp; Craftsmanship</a> (55)
+</li>
+	<li class="cat-item cat-item-59"><a href="https://carlosbuenosvinos.com/category/databases/" >Databases</a> (4)
+</li>
+	<li class="cat-item cat-item-199"><a href="https://carlosbuenosvinos.com/category/ddd/" >DDD</a> (50)
+</li>
+	<li class="cat-item cat-item-222"><a href="https://carlosbuenosvinos.com/category/devops/" >DevOps</a> (9)
+</li>
+	<li class="cat-item cat-item-174"><a href="https://carlosbuenosvinos.com/category/javascript/" >Javascript</a> (2)
+</li>
+	<li class="cat-item cat-item-2"><a href="https://carlosbuenosvinos.com/category/mobile/" >Mobile</a> (6)
+</li>
+	<li class="cat-item cat-item-5"><a href="https://carlosbuenosvinos.com/category/php/" >PHP</a> (75)
+</li>
+	<li class="cat-item cat-item-269"><a href="https://carlosbuenosvinos.com/category/rigor-talks/" >Rigor Talks</a> (32)
+</li>
+	<li class="cat-item cat-item-236"><a href="https://carlosbuenosvinos.com/category/ror/" >RoR</a> (1)
+</li>
+	<li class="cat-item cat-item-123"><a href="https://carlosbuenosvinos.com/category/scrum-2/" >Scrum</a> (9)
+</li>
+	<li class="cat-item cat-item-4"><a href="https://carlosbuenosvinos.com/category/talks/" >Talks</a> (26)
+</li>
+	<li class="cat-item cat-item-49"><a href="https://carlosbuenosvinos.com/category/tdd-and-katas/" >TDD &amp; Katas</a> (44)
+</li>
+		</ul>
+</aside></div>        </div>
+      </div>
+    </div>
+    <footer id="colophon" class="site-footer" role="contentinfo">
+      <div class="container">
+        <div class="site-info">
+                    <a href="http://wordpress.org/" title="A Semantic Personal Publishing Platform" rel="generator">Proudly powered by WordPress</a><span class="sep">.</span>
+          Theme: DW Minion by <a href="http://www.designwall.com/" rel="nofollow">DesignWall</a>.        </div>
+      </div>
+    </footer>
+  </div>
+</div>
+        <script type="text/javascript">
+        // <![CDATA[
+        var disqus_shortname = 'carlosbuenosvinos';
+        (function () {
+            var nodes = document.getElementsByTagName('span');
+            for (var i = 0, url; i < nodes.length; i++) {
+                if (nodes[i].className.indexOf('dsq-postid') != -1 && nodes[i].parentNode.tagName == 'A') {
+                    nodes[i].parentNode.setAttribute('data-disqus-identifier', nodes[i].getAttribute('data-dsqidentifier'));
+                    url = nodes[i].parentNode.href.split('#', 1);
+                    if (url.length == 1) { url = url[0]; }
+                    else { url = url[1]; }
+                    nodes[i].parentNode.href = url + '#disqus_thread';
+                }
+            }
+            var s = document.createElement('script');
+            s.async = true;
+            s.type = 'text/javascript';
+            s.src = '//' + disqus_shortname + '.disqus.com/count.js';
+            (document.getElementsByTagName('HEAD')[0] || document.getElementsByTagName('BODY')[0]).appendChild(s);
+        }());
+        // ]]>
+        </script>
+        <script>
+  (function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+  (i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+  m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+  })(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+  ga('create', 'UA-42173983-1', 'auto');
+  ga('send', 'pageview');
+
+</script>
+
+<script async src="//pagead2.googlesyndication.com/pagead/js/adsbygoogle.js"></script>
+<script>
+  (adsbygoogle = window.adsbygoogle || []).push({
+    google_ad_client: "ca-pub-3097358461405341",
+    enable_page_level_ads: true
+  });
+</script>
+	<script type="text/javascript">
+		window.WPCOM_sharing_counts = {"https:\/\/carlosbuenosvinos.com\/github-ansible-deploy-your-public-ssh-keys-to-your-server\/":957};
+	</script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/plugins/jetpack/modules/photon/photon.js?ver=20130122'></script>
+<script type='text/javascript' src='https://s0.wp.com/wp-content/js/devicepx-jetpack.js?ver=201812'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-includes/js/comment-reply.min.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/main.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/bootstrap-transition.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/bootstrap-carousel.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/bootstrap-collapse.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/themes/dw-minion/assets/js/bootstrap-tab.js?ver=4.9.3'></script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-includes/js/wp-embed.min.js?ver=4.9.3'></script>
+<script type='text/javascript'>
+/* <![CDATA[ */
+var sharing_js_options = {"lang":"en","counts":"1"};
+/* ]]> */
+</script>
+<script type='text/javascript' src='https://carlosbuenosvinos.com/wp-content/plugins/jetpack/modules/sharedaddy/sharing.js?ver=5.6.1'></script>
+<script type='text/javascript'>
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-twitter', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomtwitter', 'menubar=1,resizable=1,width=600,height=350' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-linkedin', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomlinkedin', 'menubar=1,resizable=1,width=580,height=450' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-pocket', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcompocket', 'menubar=1,resizable=1,width=450,height=450' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-facebook', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomfacebook', 'menubar=1,resizable=1,width=600,height=400' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-google-plus-1', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomgoogle-plus-1', 'menubar=1,resizable=1,width=480,height=550' );
+				return false;
+			});
+var windowOpen;
+			jQuery( document.body ).on( 'click', 'a.share-tumblr', function() {
+				// If there's another sharing window open, close it.
+				if ( 'undefined' !== typeof windowOpen ) {
+					windowOpen.close();
+				}
+				windowOpen = window.open( jQuery( this ).attr( 'href' ), 'wpcomtumblr', 'menubar=1,resizable=1,width=450,height=450' );
+				return false;
+			});
+</script>
+<script type='text/javascript' src='https://stats.wp.com/e-201812.js' async defer></script>
+<script type='text/javascript'>
+	_stq = window._stq || [];
+	_stq.push([ 'view', {v:'ext',j:'1:5.6.1',blog:'54659391',post:'957',tz:'1',srv:'carlosbuenosvinos.com'} ]);
+	_stq.push([ 'clickTrackerInit', '54659391', '957' ]);
+</script>
+</body>
+</html>
