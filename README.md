@@ -25,6 +25,6 @@ This is the repository of a web app where users can enter their GitHub username 
 * Open the "index.html" file and it should automaticaly be opened in your browser.
 
 ---
-Copyright and License are under [**MIT**]()
+Copyright and License are under [link](https://github.com/markmurimi/API-Access/blob/master/LICENSE)
 
 ©MARKKMURIMI ~ 2018
