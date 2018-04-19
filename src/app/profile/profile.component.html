@@ -17,6 +17,7 @@
     </div>
     </div>
     <div class="container"style="background-color:white;padding-left:20px;margin-left:250px;margin-right:250px;padding-right:20px;padding-bottom:30px;text-align:center;">
+      
      
         <div class="container"style="font-size:40px;">
           <img class="profile-img img-thumbnail" src="{{user.avatar_url}}">
@@ -25,6 +26,7 @@
           <p>{{user.bio}}</p>
           <p>{{user.location}}</p>
           <p>{{user.email}}</p>
+          <a class="btn btn-default btn-block" target="_blank" href="{{user.html_url}}">View Profile</a>
         </div>
         <div class="col-md-4">
           <div class="track" style="font-size:20px;">
@@ -44,7 +46,7 @@
                 <div class="row">
                   <div class="col-md-9">
                     <h2><b>
-                      <a href="user.html_url" target="_blank"style="color:blue">{{repo.name}}</a></b>
+                      <a href="repo.html_url" target="_blank"style="color:blue">{{repo.name}}</a></b>
                     </h2>
                     <p><b>{{repo.description}}</b></p>
                   </div>
