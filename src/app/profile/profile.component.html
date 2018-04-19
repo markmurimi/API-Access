@@ -1,24 +1,23 @@
-<body style="background-color:#282828;background-attachment:fixed;">
-<div class="jumbotron" style="background-color:#191919;">
-  <div class="container" style="color:white;background-color:black; opacity:0.6;text-align:center;padding:120px;font-size:150%;">
-    <h1>GITHUB SEARCH APP</h1>
+<body style="background-image:Url('./assets/images.jpeg');background-attachment: fixed" >
+<div class="container" >
+  <div class="jumbotron"style="padding:60px;" >
+    <h1 style="text-align:center; font-size:435%; color:white;">GITHUB SEARCH APP</h1>
   </div>
 </div>
-<div class="container"style="padding:30px;background-color:white;opacity:0.6;margin-left:300px;margin-right:300px;">
+<div class="container" style="padding:60px;color:grey;">
     <div class="col-md-8">
-      <form style="text-align:center;font-size:30px;">
+      <form style="text-align:center;font-size:50px;">
         <div class="form-group">
           <label for="name"><b>GitHub Username</b></label>
           <p></p>
           <input class="form-control" type="text" placeholder="GitHub username" name="username" [(ngModel)]="username" (keyup)="searchUser()">
         </div>
       </form>
-      <p style="text-align:center;font-size:30px;"><b>Profile Details.</b></p>
+      <p style="text-align:center;font-size:50px;"><b>Profile Details.</b></p>
     </div>
     </div>
-    <div class="container"style="background-color:white;padding-left:20px;margin-left:250px;margin-right:250px;padding-right:20px;padding-bottom:30px;text-align:center;">
+    <div class="container" style="background-color:grey;padding-left:20px;padding-right:20px;padding-bottom:30px;text-align:center;">
       
-     
         <div class="container"style="font-size:40px;">
           <img class="profile-img img-thumbnail" src="{{user.avatar_url}}">
           <h1><b>{{user.name}}</b></h1>
