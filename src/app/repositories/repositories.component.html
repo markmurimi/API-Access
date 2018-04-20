@@ -30,7 +30,25 @@
               <p>Member Since: {{user.created_at}}</p>
               <p>Was lastly Updated on:{{user.updated_at}}</p>
               </div>
-              </div>
-              </div>
-              </body>
+              <div class="container" style="padding: right 500px;">
+                <div class="panel panel-default">
+                  <div class="panel-heading">
+                    <h3 class="panel-title" style="text-align:center;text-decoration: underline;font-size:25px;color:darkmagenta"><strong>USER REPOSITORIES</strong></h3>
+                  </div>
+                  <hr>
+                  <div class="container">
+                    <div *ngFor="let repo of repos">                      
+                          <h4>
+                            <a target="_blank" href="{{repo.html_url}}">{{repo.name}}</a>
+                          </h4>
+                          <p>{{repo.description}}</p>
+                          <hr>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </div>
+                        </body>
+              
               
