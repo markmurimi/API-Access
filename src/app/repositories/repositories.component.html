@@ -1,0 +1,19 @@
+<div class="container">
+    <div class="panel panel-default">
+        <div class="panel-heading">
+          <h1 class="panel-title">Repositories</h1>
+        </div>
+        <div class="panel-body">
+          <div *ngFor="let repo of repos">
+            <div class="row">
+              <div class="col-md-9">
+                <h2><b>
+                  <a href="repo.html_url" target="_blank"style="color:blue">{{repo.name}}</a></b>
+                </h2>
+                <p><b>{{repo.description}}</b></p>
+              </div>
+            </div>
+        </div>
+    </div>
+    </div>
+</div>

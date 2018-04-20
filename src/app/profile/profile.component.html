@@ -1,4 +1,4 @@
-<body style="background-image:Url('./assets/images.jpeg');background-attachment: fixed" >
+<body style="background-image:Url('./assets/images.jpeg');background-attachment:fixed" >
 <div class="container" >
   <div class="jumbotron"style="padding:60px;" >
     <h1 style="text-align:center; font-size:435%; color:white;">GITHUB SEARCH APP</h1>
@@ -34,29 +34,9 @@
             <p>Following: {{user.following}}</p>
             <p>Member Since: {{user.created_at}}</p>
             <p>Was lastly Updated on:{{user.updated_at}}</p>
+          <a routerLink='/repositories' routerLinkActive='active'>User Repositories</a>
+          <router-outlet></router-outlet>
           </div>          
-          <div class="container">
-          <div class="panel panel-default">
-            <div class="panel-heading">
-              <h1 class="panel-title">Repositories</h1>
-            </div>
-            <div class="panel-body">
-              <div *ngFor="let repo of repos">
-                <div class="row">
-                  <div class="col-md-9">
-                    <h2><b>
-                      <a href="repo.html_url" target="_blank"style="color:blue">{{repo.name}}</a></b>
-                    </h2>
-                    <p><b>{{repo.description}}</b></p>
-                  </div>
-                  <div class="col-md-3">
-                  </div>
-                </div>
-                <hr>
-              </div>
-            </div>
-          </div>
-        </div>
         </div>
         </div>
       
