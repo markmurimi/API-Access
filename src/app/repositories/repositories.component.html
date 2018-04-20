@@ -1,19 +1,36 @@
-<div class="container">
-    <div class="panel panel-default">
-        <div class="panel-heading">
-          <h1 class="panel-title">Repositories</h1>
-        </div>
-        <div class="panel-body">
-          <div *ngFor="let repo of repos">
-            <div class="row">
-              <div class="col-md-9">
-                <h2><b>
-                  <a href="repo.html_url" target="_blank"style="color:blue">{{repo.name}}</a></b>
-                </h2>
-                <p><b>{{repo.description}}</b></p>
+<body style="background-image:Url('./assets/images.jpeg');background-attachment:fixed" >
+  <div class="container" style="padding:60px;color:grey;">
+      <div class="col-md-8">
+        <form style="text-align:center;font-size:50px;">
+          <div class="form-group">
+            <label for="name"><b>GitHub Username</b></label>
+            <p></p>
+            <input class="form-control" type="text" placeholder="GitHub username" name="username" [(ngModel)]="username" (keyup)="searchUser()">
+          </div>
+        </form>
+        <p style="text-align:center;font-size:50px;"><b>Profile Details.</b></p>
+      </div>
+      </div>
+      <div class="container" style="background-color:grey;padding-left:20px;padding-right:20px;padding-bottom:30px;text-align:center;">
+        
+          <div class="container"style="font-size:40px;">
+            <img class="profile-img img-thumbnail" src="{{user.avatar_url}}">
+            <h1><b>{{user.name}}</b></h1>
+            <p>{{user.login}}</p>
+            <p>{{user.bio}}</p>
+            <p>{{user.location}}</p>
+            <p>{{user.email}}</p>
+            <a class="btn btn-default btn-block" target="_blank" href="{{user.html_url}}">View Profile</a>
+          </div>
+          <div class="col-md-4">
+            <div class="track" style="font-size:20px;">
+              <p>Repositories:<span class=label-label-primary>{{user.public_repos}}</span></p>
+              <p>Followers: {{user.followers}}</p>
+              <p>Following: {{user.following}}</p>
+              <p>Member Since: {{user.created_at}}</p>
+              <p>Was lastly Updated on:{{user.updated_at}}</p>
               </div>
-            </div>
-        </div>
-    </div>
-    </div>
-</div>
+              </div>
+              </div>
+              </body>
+              

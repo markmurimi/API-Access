@@ -1,43 +1,9 @@
 <body style="background-image:Url('./assets/images.jpeg');background-attachment:fixed" >
-<div class="container" >
-  <div class="jumbotron"style="padding:60px;" >
-    <h1 style="text-align:center; font-size:435%; color:white;">GITHUB SEARCH APP</h1>
-  </div>
+  <div class="container"style="text-align:center;padding:33px;" >
+    <div class="jumbotron"style="padding:60px;" >
+      <h1 style="text-align:center; font-size:445%;text-decoration: underline; color:white;">GITHUB SEARCH APP</h1>
+      <p style="color:white;font-size:40px;"><b>WELCOME!</b> to the GitHub search app which allows a user to search for a github user using his or her username and outputs the search details from github.Feel free to explore the app.</p>
+      <button style="padding-left:30px;padding-right:30px; background-color:black;color:white;" a routerLink='/repositories' routerLinkActive='active'><h1>USE APP</h1></button>
+      <router-outlet></router-outlet>
 </div>
-<div class="container" style="padding:60px;color:grey;">
-    <div class="col-md-8">
-      <form style="text-align:center;font-size:50px;">
-        <div class="form-group">
-          <label for="name"><b>GitHub Username</b></label>
-          <p></p>
-          <input class="form-control" type="text" placeholder="GitHub username" name="username" [(ngModel)]="username" (keyup)="searchUser()">
-        </div>
-      </form>
-      <p style="text-align:center;font-size:50px;"><b>Profile Details.</b></p>
-    </div>
-    </div>
-    <div class="container" style="background-color:grey;padding-left:20px;padding-right:20px;padding-bottom:30px;text-align:center;">
-      
-        <div class="container"style="font-size:40px;">
-          <img class="profile-img img-thumbnail" src="{{user.avatar_url}}">
-          <h1><b>{{user.name}}</b></h1>
-          <p>{{user.login}}</p>
-          <p>{{user.bio}}</p>
-          <p>{{user.location}}</p>
-          <p>{{user.email}}</p>
-          <a class="btn btn-default btn-block" target="_blank" href="{{user.html_url}}">View Profile</a>
-        </div>
-        <div class="col-md-4">
-          <div class="track" style="font-size:20px;">
-            <p>Repositories:<span class=label-label-primary>{{user.public_repos}}</span></p>
-            <p>Followers: {{user.followers}}</p>
-            <p>Following: {{user.following}}</p>
-            <p>Member Since: {{user.created_at}}</p>
-            <p>Was lastly Updated on:{{user.updated_at}}</p>
-          <a routerLink='/repositories' routerLinkActive='active'>User Repositories</a>
-          <router-outlet></router-outlet>
-          </div>          
-        </div>
-        </div>
-      
-    </body>
+</div>

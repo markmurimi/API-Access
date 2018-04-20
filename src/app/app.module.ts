@@ -16,7 +16,7 @@ const appRoutes: Routes = [
   declarations: [
     AppComponent,
     ProfileComponent,
-    RepositoriesComponent,
+    RepositoriesComponent
   ],
   imports: [
     BrowserModule,
